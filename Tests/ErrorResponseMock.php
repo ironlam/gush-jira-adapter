@@ -1,6 +1,6 @@
 <?php
 
-namespace JiraApiBundle\Tests;
+namespace Gush\Tests;
 
 /**
  * Mocks JSON response that returns an error for unit testing purposes.

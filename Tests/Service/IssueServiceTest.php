@@ -7,9 +7,6 @@ use Gush\Service\IssueService;
 
 class IssueServiceTest extends TestCase
 {
-    /**
-     * @group now
-     */
     public function testIssueServiceGet()
     {        
         $jsonFile = __DIR__ . '/../assets/response/issue.json';
@@ -19,9 +16,9 @@ class IssueServiceTest extends TestCase
         );
 
         $result = $service->get('AA-999');
-//
-//        $this->assertEquals('AA-999', $result['key']);
-//        $this->assertEquals('Bug', $result['fields']['issuetype']['name']);
+
+        $this->assertEquals('AA-999', $result['key']);
+        $this->assertEquals('Bug', $result['fields']['issuetype']['name']);
     }
 
     /**
