@@ -48,4 +48,38 @@ class IssueServiceTest extends TestCase
 
         $this->assertEquals(false, $result);
     }
+
+    /**
+     * @group now
+     */
+    public function testCreateAnIssue()
+    {
+        $jsonFile = __DIR__ . '/../assets/response/issueGRA.json';
+
+        $service = new IssueService(
+            $this->getClientMock($jsonFile)
+        );
+
+        $data = [
+            "fields" => [
+                "project" => ["id" => "10000"],
+                "summary" => "something's wrong",
+                "issuetype" => ["id" => "10000"],
+                "assignee" => ["name" => "homer"],
+                "reporter" => [ "name" => "smithers"],
+                "priority" => ["id" => "20000"],
+                "timetracking" =>  [
+                    "originalEstimate" => "10",
+                    "remainingEstimate" => "10",
+                ],
+                "description" =>  "description",
+                "duedate" =>  "2011-03-11",
+            ]
+        ];
+
+        $result = $service->createIssue($data);
+
+        $this->assertEquals('AA-999', $result['key']);
+        $this->assertEquals('Bug', $result['fields']['issuetype']['name']);
+    }
 }

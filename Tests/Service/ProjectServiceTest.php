@@ -20,6 +20,19 @@ class ProjectServiceTest extends TestCase
         $this->assertEquals(2, count($result));
     }
 
+    public function testProjectServiceGetSingleProject()
+    {
+        $jsonFile = __DIR__ . '/../assets/response/projectGRA.json';
+
+        $service = new ProjectService(
+            $this->getClientMock($jsonFile)
+        );
+
+        $result = $service->getProjectId($projectId = 'GRA');
+
+        $this->assertEquals(10000, $result['id']);
+    }
+
     /**
      * @expectedException \Guzzle\Http\Exception\BadResponseException
      */

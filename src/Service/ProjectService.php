@@ -18,4 +18,11 @@ class ProjectService extends AbstractService
             $this->createUrl('project')
         );
     }
+
+    public function getProjectId($projectId)
+    {
+        return $this->performQuery(
+            $this->createUrl('project/'.$projectId)
+        );
+    }
 }

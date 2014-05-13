@@ -67,6 +67,15 @@ abstract class AbstractService
         return $this->getResponseAsArray();
     }
 
+    protected function performPost($url, $data)
+    {
+        $request = $this->client->post($url, null, json_encode($data));
+
+        $this->response = $request->send();
+
+        return $this->getResponseAsArray();
+    }
+
     /**
      * Get response as an array.
      *
