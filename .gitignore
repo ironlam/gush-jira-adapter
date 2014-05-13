@@ -1,5 +1,3 @@
-vendor/*
-build
-phpunit.xml
-.idea
-
+/vendor
+/build
+/phpunit.xml
