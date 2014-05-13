@@ -31,3 +31,5 @@ $searchService->search(
     )
 );
 ```
+
+note: inspired from https://github.com/MedicoreNL/JiraApiBundle
