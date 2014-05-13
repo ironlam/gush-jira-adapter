@@ -26,14 +26,16 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
         $client = $this
             ->getMockBuilder('Guzzle\Http\Client')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMock()
+        ;
 
         $client
             ->expects($this->any())
             ->method('get')
             ->will(
                 $this->returnValue($request)
-            );
+            )
+        ;
 
         return $client;
     }
@@ -61,7 +63,8 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
             ->method('send')
             ->will(
                 $this->returnValue(new JsonResponseMock($jsonFile))
-            );
+            )
+        ;
 
         return $this->mockClientWithRequest($request);
     }
