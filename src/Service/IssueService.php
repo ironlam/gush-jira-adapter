@@ -1,9 +1,6 @@
 <?php
 
-namespace JiraApiBundle\Service;
-
-use Guzzle\Http\Client;
-use Guzzle\Http\Exception\BadResponseException;
+namespace Gush\Service;
 
 /**
  * Service class that manages issues.
@@ -23,6 +20,14 @@ class IssueService extends AbstractService
             $this->createUrl(
                 sprintf('issue/%s', $key)
             )
+        );
+    }
+
+    public function createIssue($data)
+    {
+        return $this->performPost(
+            $this->createUrl('issue'),
+            $data
         );
     }
 }

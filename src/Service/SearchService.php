@@ -1,9 +1,6 @@
 <?php
 
-namespace JiraApiBundle\Service;
-
-use Guzzle\Http\Client;
-use Guzzle\Http\Exception\BadResponseException;
+namespace Gush\Service;
 
 /**
  * Service class that handles searches.
@@ -15,7 +12,7 @@ class SearchService extends AbstractPagedService
      * 
      * @param array $params
      * 
-     * @return boolean|array
+     * @return Boolean|array
      */
     public function search(array $params = array())
     {

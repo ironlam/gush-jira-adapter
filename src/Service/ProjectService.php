@@ -1,9 +1,6 @@
 <?php
 
-namespace JiraApiBundle\Service;
-
-use Guzzle\Http\Client;
-use Guzzle\Http\Exception\BadResponseException;
+namespace Gush\Service;
 
 /**
  * Service class that handles projects.
@@ -19,6 +16,13 @@ class ProjectService extends AbstractService
     {
         return $this->performQuery(
             $this->createUrl('project')
+        );
+    }
+
+    public function getProjectId($projectId)
+    {
+        return $this->performQuery(
+            $this->createUrl('project/'.$projectId)
         );
     }
 }

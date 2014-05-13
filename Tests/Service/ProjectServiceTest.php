@@ -1,9 +1,9 @@
 <?php
 
-namespace JiraApiBundle\Tests\Service;
+namespace Gush\Tests\Service;
 
-use JiraApiBundle\Tests\TestCase;
-use JiraApiBundle\Service\ProjectService;
+use Gush\Tests\TestCase;
+use Gush\Service\ProjectService;
 
 class ProjectServiceTest extends TestCase
 {
@@ -18,6 +18,19 @@ class ProjectServiceTest extends TestCase
         $result = $service->getAll();
 
         $this->assertEquals(2, count($result));
+    }
+
+    public function testProjectServiceGetSingleProject()
+    {
+        $jsonFile = __DIR__ . '/../assets/response/projectGRA.json';
+
+        $service = new ProjectService(
+            $this->getClientMock($jsonFile)
+        );
+
+        $result = $service->getProjectId($projectId = 'GRA');
+
+        $this->assertEquals(10000, $result['id']);
     }
 
     /**
