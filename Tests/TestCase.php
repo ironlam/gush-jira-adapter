@@ -1,6 +1,6 @@
 <?php
 
-namespace JiraApiBundle\Tests;
+namespace Gush\Tests;
 
 use Guzzle\Http\Exception\BadResponseException;
 

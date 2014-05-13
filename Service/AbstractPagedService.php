@@ -1,6 +1,6 @@
 <?php
 
-namespace JiraApiBundle\Service;
+namespace Gush\Service;
 
 /**
  * Base class that contains common features needed by services with paged results.
@@ -22,13 +22,13 @@ abstract class AbstractPagedService extends AbstractService
      *
      * {@inheritDoc}
      */
-    protected function createUrl($path, array $params = array())
+    protected function createUrl($path, array $params = [])
     {
         $params = array_merge(
-            array(
+            [
                 'startAt'    => $this->start,
                 'maxResults' => $this->limit
-            ),
+            ],
             $params
         );
 
@@ -42,7 +42,7 @@ abstract class AbstractPagedService extends AbstractService
      *
      * @param $start
      *
-     * @return \JiraApiBundle\Service\AbstractPagedService
+     * @return AbstractPagedService
      */
     public function setStart($start)
     {
@@ -54,7 +54,7 @@ abstract class AbstractPagedService extends AbstractService
     /**
      * Returns the start of the current result page.
      *
-     * @return bool|int
+     * @return Boolean|int
      */
     public function getStart()
     {
@@ -66,7 +66,7 @@ abstract class AbstractPagedService extends AbstractService
      *
      * @param integer $limit
      *
-     * @return \JiraApiBundle\Service\AbstractPagedService
+     * @return AbstractPagedService
      */
     public function setLimit($limit)
     {
@@ -78,7 +78,7 @@ abstract class AbstractPagedService extends AbstractService
     /**
      * Returns the result limit.
      *
-     * @return bool|int
+     * @return Boolean|int
      */
     public function getLimit()
     {

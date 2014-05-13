@@ -16,8 +16,8 @@ class ErrorResponseMock
     public function json()
     {
         return array(
-            'errorMessages' => array('This is an error message.'),
-            'errors'        => array(),
+            'errorMessages' => ['This is an error message.'],
+            'errors'        => [],
          );
     }
 }

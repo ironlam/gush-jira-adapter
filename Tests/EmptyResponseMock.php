@@ -1,6 +1,6 @@
 <?php
 
-namespace JiraApiBundle\Tests;
+namespace Gush\Tests;
 
 /**
  * Mocks empty JSON response for unit testing purposes.
@@ -15,6 +15,6 @@ class EmptyResponseMock
 
     public function json()
     {
-        return array();
+        return [];
     }
 }

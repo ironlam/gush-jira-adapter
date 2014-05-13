@@ -1,6 +1,6 @@
 <?php
 
-namespace JiraApiBundle\Service;
+namespace Gush\Service;
 
 use Guzzle\Http\Client;
 
@@ -56,7 +56,7 @@ abstract class AbstractService
      *
      * @param string $url
      *
-     * @return bool|array
+     * @return Boolean|array
      */
     protected function performQuery($url)
     {
@@ -86,7 +86,7 @@ abstract class AbstractService
     /**
      * Indicates whether the response contains errors.
      *
-     * @return bool
+     * @return Boolean
      */
     private function responseHasErrors()
     {

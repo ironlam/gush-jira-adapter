@@ -1,9 +1,6 @@
 <?php
 
-namespace JiraApiBundle\Service;
-
-use Guzzle\Http\Client;
-use Guzzle\Http\Exception\BadResponseException;
+namespace Gush\Service;
 
 /**
  * Service class that manages issues.

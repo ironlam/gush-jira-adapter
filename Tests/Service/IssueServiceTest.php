@@ -1,9 +1,9 @@
 <?php
 
-namespace JiraApiBundle\Tests\Service;
+namespace Gush\Tests\Service;
 
-use JiraApiBundle\Tests\TestCase;
-use JiraApiBundle\Service\IssueService;
+use Gush\Tests\TestCase;
+use Gush\Service\IssueService;
 
 class IssueServiceTest extends TestCase
 {
