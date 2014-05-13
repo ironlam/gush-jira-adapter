@@ -1,5 +1,5 @@
 {
-    "name": "gush/gush-jira-adapter",
+    "name": "gushphp/gush-jira-adapter",
     "type": "library",
     "description": "Jira REST API integration library",
     "keywords": ["jira", "rest", "library", "gush"],
