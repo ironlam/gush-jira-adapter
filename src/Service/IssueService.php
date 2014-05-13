@@ -22,4 +22,9 @@ class IssueService extends AbstractService
             )
         );
     }
+
+    public function createIssue($data)
+    {
+        return $this->client->send();
+    }
 }
