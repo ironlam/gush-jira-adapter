@@ -1,26 +1,24 @@
 {
     "name": "gushphp/gush-jira-adapter",
-    "type": "library",
-    "description": "Jira REST API integration library",
+    "description": "Jira Gush Adapter",
+    "license": "MIT",
     "keywords": ["jira", "rest", "library", "gush"],
     "authors": [
         {
             "name": "Luis Cordova",
             "email": "cordoval@gmail.com"
+        },
+        {
+            "name": "Alex Kovalevych",
+            "email": "alexkovalevych@gmail.com"
         }
     ],
     "require": {
-        "php": ">=5.3.3",
-        "guzzle/guzzle": "~3.9"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "~3.7",
-        "raulfraile/ladybug": "~1.0"
+        "alexkovalevych/jira-api": "~1.0.0"
     },
     "autoload": {
-        "psr-4": {"Gush\\": "src"}
-    },
-    "autoload-dev": {
-        "psr-4": {"Gush\\Tests\\": "tests"}
+        "psr-4": {
+            "Gush\\Adapter\\": "src/"
+        }
     }
 }
