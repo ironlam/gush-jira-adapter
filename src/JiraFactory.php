@@ -19,26 +19,9 @@ use Symfony\Component\Console\Helper\HelperSet;
  */
 class JiraFactory
 {
-    public static function createAdapter($adapterConfig, Config $config)
-    {
-        return new GitHubAdapter($adapterConfig, $config);
-    }
-
-    public static function createAdapterConfigurator(HelperSet $helperSet)
-    {
-        $configurator = new DefaultConfigurator(
-            $helperSet->get('dialog'),
-            'GitHub',
-            'https://api.github.com/',
-            'https://github.com'
-        );
-
-        return $configurator;
-    }
-
     public static function createIssueTracker($adapterConfig, Config $config)
     {
-        return new GitHubAdapter($adapterConfig, $config);
+        return new JiraIssueTracker($adapterConfig, $config);
     }
 
     public static function createIssueTrackerConfigurator(HelperSet $helperSet)

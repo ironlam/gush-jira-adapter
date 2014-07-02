@@ -18,7 +18,7 @@ use JiraApi\Clients\IssueClient;
 /**
  * @author Luis Cordova <cordoval@gmail.com>
  */
-class JiraAdapter implements IssueTracker
+class JiraIssueTracker implements IssueTracker
 {
     /**
      * @var string|null
