@@ -66,7 +66,7 @@ class JiraIssueTracker implements IssueTracker
      */
     public function supportsRepository($remoteUrl)
     {
-        return false !== stripos($remoteUrl, 'attlasian.net');
+        return false !== stripos($remoteUrl, 'atlassian.net');
     }
 
     /**
