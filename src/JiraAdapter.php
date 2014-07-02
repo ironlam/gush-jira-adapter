@@ -134,25 +134,6 @@ class JiraAdapter implements IssueTracker
     /**
      * {@inheritdoc}
      */
-    public function createFork($org)
-    {
-        $api = $this->client->api('repo');
-
-        $result = $api->forks()->create(
-            $this->getUsername(),
-            $this->getRepository(),
-            ['org' => $org]
-        );
-
-        return [
-            'git_url' => $result['ssh_url'],
-            'html_url' => $result['html_url'],
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function openIssue($subject, $body, array $options = [])
     {
         $api = $this->client->api('issue');
