@@ -14,6 +14,7 @@ namespace Gush\Adapter;
 use Gush\Config;
 use Gush\Util\ArrayUtil;
 use JiraApi\Clients\IssueClient;
+use JiraApi\Clients\ProjectClient;
 
 /**
  * @author Luis Cordova <cordoval@gmail.com>
@@ -74,8 +75,8 @@ class JiraIssueTracker implements IssueTracker
 
         return new IssueClient(
             $this->url,
-            $this->config['username'],
-            $this->config['password']
+            $this->config['authentication'][IssueClient::AUTH_HTTP_PASSWORD]['username'],
+            $this->config['authentication'][IssueClient::AUTH_HTTP_PASSWORD]['password']
         );
     }
 
@@ -84,22 +85,16 @@ class JiraIssueTracker implements IssueTracker
      */
     public function authenticate()
     {
-        $credentials = $this->config['authentication'];
+        $projectClient = new ProjectClient(
+            $this->url,
+            $this->config['authentication'][IssueClient::AUTH_HTTP_PASSWORD]['username'],
+            $this->config['authentication'][IssueClient::AUTH_HTTP_PASSWORD]['password']
+        );
 
-        if (IssueClient::AUTH_HTTP_PASSWORD === $credentials['http-auth-type']) {
-            $this->issueClient->authenticate(
-                $credentials['username'],
-                $credentials['password-or-token'],
-                $credentials['http-auth-type']
-            );
-        } else {
-            $this->issueClient->authenticate(
-                $credentials['password-or-token'],
-                $credentials['http-auth-type']
-            );
-        }
+        /** @var \GuzzleHttp\Message\Response $response */
+        $response = $projectClient->getAll();
 
-        $this->authenticationType = $credentials['http-auth-type'];
+        return 200 === $response->getStatusCode();
     }
 
     /**
@@ -107,13 +102,7 @@ class JiraIssueTracker implements IssueTracker
      */
     public function isAuthenticated()
     {
-        if (IssueClient::AUTH_HTTP_PASSWORD === $this->authenticationType) {
-            return is_array(
-                $this->issueClient->api('authorizations')->all()
-            );
-        }
-
-        return is_array($this->issueClient->api('me')->show());
+        return $this->authenticate();
     }
 
     /**
@@ -121,7 +110,7 @@ class JiraIssueTracker implements IssueTracker
      */
     public function getTokenGenerationUrl()
     {
-        return sprintf('%s/settings/applications', $this->url);
+        throw new \Exception('not implemented');
     }
 
     /**
@@ -129,11 +118,7 @@ class JiraIssueTracker implements IssueTracker
      */
     public function openIssue($subject, $body, array $options = [])
     {
-        $api = $this->issueClient->api('issue');
-
-        $issue = $api->create(
-            $this->getUsername(),
-            $this->getRepository(),
+        $issue = $this->issueClient->create(
             array_merge($options, ['title' => $subject, 'body' => $body])
         );
 
@@ -145,12 +130,8 @@ class JiraIssueTracker implements IssueTracker
      */
     public function getIssue($id)
     {
-        $api = $this->issueClient->api('issue');
-
         return $this->adaptIssueStructure(
-            $api->show(
-                $this->getUsername(),
-                $this->getRepository(),
+            $this->issueClient->get(
                 $id
             )
         );
@@ -171,7 +152,6 @@ class JiraIssueTracker implements IssueTracker
     {
         // FIXME is not respecting the pagination
 
-        $pager = new ResultPager($this->client);
         $fetchedIssues = $pager->fetchAll(
             $this->issueClient->api('issue'),
             'all',
