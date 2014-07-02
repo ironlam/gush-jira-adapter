@@ -176,11 +176,7 @@ class JiraIssueTracker implements IssueTracker
      */
     public function updateIssue($id, array $parameters)
     {
-        $api = $this->issueClient->api('issue');
-
-        $api->update(
-            $this->getUsername(),
-            $this->getRepository(),
+        $this->issueClient->update(
             $id,
             $parameters
         );
@@ -199,11 +195,7 @@ class JiraIssueTracker implements IssueTracker
      */
     public function createComment($id, $message)
     {
-        $api = $this->issueClient->api('issue')->comments();
-
-        $comment = $api->create(
-            $this->getUsername(),
-            $this->getRepository(),
+        $comment = $this->issueClient->createComment(
             $id,
             ['body' => $message]
         );
@@ -216,14 +208,10 @@ class JiraIssueTracker implements IssueTracker
      */
     public function getComments($id)
     {
-        $pager = new ResultPager($this->client);
-
         $fetchedComments = $pager->fetchAll(
             $this->issueClient->api('issue')->comments(),
             'all',
             [
-                $this->getUsername(),
-                $this->getRepository(),
                 $id,
             ]
         );
@@ -249,13 +237,8 @@ class JiraIssueTracker implements IssueTracker
      */
     public function getLabels()
     {
-        $api = $this->issueClient->api('issue')->labels();
-
         return ArrayUtil::getValuesFromNestedArray(
-            $api->all(
-                $this->getUsername(),
-                $this->getRepository()
-            ),
+            $this->issueClient->all(),
             'name'
         );
     }
@@ -265,15 +248,6 @@ class JiraIssueTracker implements IssueTracker
      */
     public function getMilestones(array $parameters = [])
     {
-        $api = $this->issueClient->api('issue')->milestones();
-
-        return ArrayUtil::getValuesFromNestedArray(
-            $api->all(
-                $this->getUsername(),
-                $this->getRepository(),
-                $parameters
-            ),
-            'title'
-        );
+        throw new \Exception('not sure how to implement');
     }
 }
