@@ -26,13 +26,11 @@ class JiraEnterpriseFactory
 
     public static function createIssueTrackerConfigurator(HelperSet $helperSet)
     {
-        $configurator = new DefaultConfigurator(
+        return new DefaultConfigurator(
             $helperSet->get('question'),
             'Jira Enterprise issue tracker',
             'https://x.mydomain.com/api/v3/',
             'https://x.mydomain.com'
         );
-
-        return $configurator;
     }
 }

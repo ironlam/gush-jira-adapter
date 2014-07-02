@@ -26,13 +26,11 @@ class JiraFactory
 
     public static function createIssueTrackerConfigurator(HelperSet $helperSet)
     {
-        $configurator = new DefaultConfigurator(
+        return new DefaultConfigurator(
             $helperSet->get('question'),
-            'GitHub issue tracker',
-            'https://api.github.com/',
-            'https://github.com'
+            'Jira issue tracker',
+            'https://attlassian.net/',
+            'https://attlassian.net'
         );
-
-        return $configurator;
     }
 }

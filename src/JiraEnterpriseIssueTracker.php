@@ -21,7 +21,7 @@ class JiraEnterpriseIssueTracker extends JiraIssueTracker
      */
     public function supportsRepository($remoteUrl)
     {
-        // always returns false as its not save to determine this (yet)
+        // always returns false as its not safe to determine this (yet)
         return false;
     }
 }
