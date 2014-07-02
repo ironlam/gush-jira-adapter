@@ -27,7 +27,7 @@ class JiraFactory
     public static function createIssueTrackerConfigurator(HelperSet $helperSet)
     {
         $configurator = new DefaultConfigurator(
-            $helperSet->get('dialog'),
+            $helperSet->get('question'),
             'GitHub issue tracker',
             'https://api.github.com/',
             'https://github.com'
