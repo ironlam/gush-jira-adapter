@@ -36,11 +36,6 @@ class JiraIssueTracker implements IssueTracker
     protected $issueClient;
 
     /**
-     * @var string
-     */
-    protected $authenticationType = IssueClient::AUTH_HTTP_PASSWORD;
-
-    /**
      * @var array
      */
     protected $config;
@@ -70,20 +65,18 @@ class JiraIssueTracker implements IssueTracker
     }
 
     /**
-     * @return Client
+     * @return IssueClient
      */
     protected function buildJiraClient()
     {
         $this->url = rtrim($this->config['base_url'], '/');
-        $issueClient = new IssueClient(
-            $this->url,
-            $username,
-            $password
-        );
-        $issueClient->setOption('base_url', $this->config['base_url']);
         $this->domain = rtrim($this->config['repo_domain_url'], '/');
 
-        return $issueClient;
+        return new IssueClient(
+            $this->url,
+            $this->config['username'],
+            $this->config['password']
+        );
     }
 
     /**
