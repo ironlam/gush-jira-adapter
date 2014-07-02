@@ -31,14 +31,14 @@ class JiraIssueTracker implements IssueTracker
     protected $domain;
 
     /**
-     * @var Client
+     * @var IssueClient
      */
-    protected $client;
+    protected $issueClient;
 
     /**
      * @var string
      */
-    protected $authenticationType = Client::AUTH_HTTP_PASSWORD;
+    protected $authenticationType = IssueClient::AUTH_HTTP_PASSWORD;
 
     /**
      * @var array
@@ -58,7 +58,7 @@ class JiraIssueTracker implements IssueTracker
     {
         $this->config = $config;
         $this->globalConfig = $globalConfig;
-        $this->client = $this->buildJiraClient();
+        $this->issueClient = $this->buildJiraClient();
     }
 
     /**
@@ -75,15 +75,15 @@ class JiraIssueTracker implements IssueTracker
     protected function buildJiraClient()
     {
         $this->url = rtrim($this->config['base_url'], '/');
-        $client = new IssueClient(
+        $issueClient = new IssueClient(
             $this->url,
             $username,
             $password
         );
-        $client->setOption('base_url', $this->config['base_url']);
+        $issueClient->setOption('base_url', $this->config['base_url']);
         $this->domain = rtrim($this->config['repo_domain_url'], '/');
 
-        return $client;
+        return $issueClient;
     }
 
     /**
@@ -93,14 +93,14 @@ class JiraIssueTracker implements IssueTracker
     {
         $credentials = $this->config['authentication'];
 
-        if (Client::AUTH_HTTP_PASSWORD === $credentials['http-auth-type']) {
-            $this->client->authenticate(
+        if (IssueClient::AUTH_HTTP_PASSWORD === $credentials['http-auth-type']) {
+            $this->issueClient->authenticate(
                 $credentials['username'],
                 $credentials['password-or-token'],
                 $credentials['http-auth-type']
             );
         } else {
-            $this->client->authenticate(
+            $this->issueClient->authenticate(
                 $credentials['password-or-token'],
                 $credentials['http-auth-type']
             );
@@ -114,13 +114,13 @@ class JiraIssueTracker implements IssueTracker
      */
     public function isAuthenticated()
     {
-        if (Client::AUTH_HTTP_PASSWORD === $this->authenticationType) {
+        if (IssueClient::AUTH_HTTP_PASSWORD === $this->authenticationType) {
             return is_array(
-                $this->client->api('authorizations')->all()
+                $this->issueClient->api('authorizations')->all()
             );
         }
 
-        return is_array($this->client->api('me')->show());
+        return is_array($this->issueClient->api('me')->show());
     }
 
     /**
@@ -136,7 +136,7 @@ class JiraIssueTracker implements IssueTracker
      */
     public function openIssue($subject, $body, array $options = [])
     {
-        $api = $this->client->api('issue');
+        $api = $this->issueClient->api('issue');
 
         $issue = $api->create(
             $this->getUsername(),
@@ -152,7 +152,7 @@ class JiraIssueTracker implements IssueTracker
      */
     public function getIssue($id)
     {
-        $api = $this->client->api('issue');
+        $api = $this->issueClient->api('issue');
 
         return $this->adaptIssueStructure(
             $api->show(
@@ -180,7 +180,7 @@ class JiraIssueTracker implements IssueTracker
 
         $pager = new ResultPager($this->client);
         $fetchedIssues = $pager->fetchAll(
-            $this->client->api('issue'),
+            $this->issueClient->api('issue'),
             'all',
             [
                 $this->getUsername(),
@@ -203,7 +203,7 @@ class JiraIssueTracker implements IssueTracker
      */
     public function updateIssue($id, array $parameters)
     {
-        $api = $this->client->api('issue');
+        $api = $this->issueClient->api('issue');
 
         $api->update(
             $this->getUsername(),
@@ -226,7 +226,7 @@ class JiraIssueTracker implements IssueTracker
      */
     public function createComment($id, $message)
     {
-        $api = $this->client->api('issue')->comments();
+        $api = $this->issueClient->api('issue')->comments();
 
         $comment = $api->create(
             $this->getUsername(),
@@ -246,7 +246,7 @@ class JiraIssueTracker implements IssueTracker
         $pager = new ResultPager($this->client);
 
         $fetchedComments = $pager->fetchAll(
-            $this->client->api('issue')->comments(),
+            $this->issueClient->api('issue')->comments(),
             'all',
             [
                 $this->getUsername(),
@@ -276,7 +276,7 @@ class JiraIssueTracker implements IssueTracker
      */
     public function getLabels()
     {
-        $api = $this->client->api('issue')->labels();
+        $api = $this->issueClient->api('issue')->labels();
 
         return ArrayUtil::getValuesFromNestedArray(
             $api->all(
@@ -292,7 +292,7 @@ class JiraIssueTracker implements IssueTracker
      */
     public function getMilestones(array $parameters = [])
     {
-        $api = $this->client->api('issue')->milestones();
+        $api = $this->issueClient->api('issue')->milestones();
 
         return ArrayUtil::getValuesFromNestedArray(
             $api->all(
