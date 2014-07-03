@@ -12,7 +12,6 @@
 namespace Gush\Adapter;
 
 use Gush\Config;
-use Gush\Util\ArrayUtil;
 use JiraApi\Clients\IssueClient;
 use JiraApi\Clients\ProjectClient;
 
@@ -75,10 +74,10 @@ class JiraIssueTracker implements IssueTracker
         $this->url = rtrim($this->config['base_url'], '/');
         $this->domain = rtrim($this->config['repo_domain_url'], '/');
 
-        $auth = $this->config['authentication'][IssueClient::AUTH_HTTP_PASSWORD];
+        $auth = $this->config['authentication'];
 
-        $this->issueClient = new IssueClient($this->url, $auth['username'], $auth['password']);
-        $this->projectClient = new ProjectClient($this->url, $auth['username'], $auth['password']);
+        $this->issueClient = new IssueClient($this->url, $auth['username'], $auth['password-or-token']);
+        $this->projectClient = new ProjectClient($this->url, $auth['username'], $auth['password-or-token']);
     }
 
     /**
@@ -227,18 +226,18 @@ class JiraIssueTracker implements IssueTracker
     protected function adaptIssueStructure(array $issue)
     {
         return [
-            'url'          => $issue['self'],
-            'number'       => $issue['id'],
-            'state'        => isset($issue['status']) ? $issue['status']['name'] : null,
-            'title'        => $issue['summary'],
-            'body'         => $issue['description'],
-            'user'         => $issue['reporter']['name'],
-            'labels'       => $issue['labels'],
-            'assignee'     => $issue['assignee']['name'],
-            'milestone'    => count($issue['versions']) > 0 ? $issue['versions'][0] : null,
-            'created_at'   => new \DateTime($issue['created']),
-            'updated_at'   => new \DateTime($issue['updated']),
-            'closed_by'    => $issue['assignee']['name'],
+            'url' => $issue['self'],
+            'number' => $issue['id'],
+            'state' => isset($issue['status']) ? $issue['status']['name'] : null,
+            'title' => $issue['summary'],
+            'body' => $issue['description'],
+            'user' => $issue['reporter']['name'],
+            'labels' => $issue['labels'],
+            'assignee' => $issue['assignee']['name'],
+            'milestone' => count($issue['versions']) > 0 ? $issue['versions'][0] : null,
+            'created_at' => new \DateTime($issue['created']),
+            'updated_at' => new \DateTime($issue['updated']),
+            'closed_by' => $issue['assignee']['name'],
             'pull_request' => false,
         ];
     }
@@ -253,10 +252,10 @@ class JiraIssueTracker implements IssueTracker
     protected function adaptCommentStructure(array $comment)
     {
         return [
-            'id'         => $comment['id'],
-            'url'        => $comment['self'],
-            'body'       => $comment['body'],
-            'user'       => $comment['author']['name'],
+            'id' => $comment['id'],
+            'url' => $comment['self'],
+            'body' => $comment['body'],
+            'user' => $comment['author']['name'],
             'created_at' => new \DateTime($comment['created']),
             'updated_at' => new \DateTime($comment['updated']),
         ];
