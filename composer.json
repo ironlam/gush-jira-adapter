@@ -14,7 +14,7 @@
         }
     ],
     "require": {
-        "alexkovalevych/jira-api": "~1.0.0"
+        "alexkovalevych/jira-api": "~1.0.3"
     },
     "autoload": {
         "psr-4": {
