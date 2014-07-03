@@ -183,12 +183,13 @@ class JiraIssueTracker implements IssueTracker
     }
 
     /**
+     * @todo ask user how to change issue status
+     *
      * {@inheritdoc}
      */
     public function closeIssue($id)
     {
-        // @todo ask user how to change issue status
-        // $this->updateIssue($id, ['state' => 'closed']);
+        throw new \Exception('This feature has yet to be implemented. Feel free to create a PR.');
     }
 
     /**
@@ -249,7 +250,7 @@ class JiraIssueTracker implements IssueTracker
      */
     public function getMilestones(array $parameters = [])
     {
-        throw new \Exception('not sure how to implement');
+        throw new \Exception('This feature has yet to be implemented. Feel free to create a PR.');
     }
 
     /**
