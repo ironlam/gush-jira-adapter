@@ -20,6 +20,9 @@
     "require": {
         "alexkovalevych/jira-api": "~1.0.3"
     },
+    "require-dev": {
+        "gushphp/gush": "dev-master@dev"
+    },
     "autoload": {
         "psr-4": {
             "Gush\\Adapter\\": "src/"
