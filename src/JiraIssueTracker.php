@@ -146,12 +146,12 @@ class JiraIssueTracker implements IssueTracker
     }
 
     /**
+     * @todo FIXME is not respecting the pagination
+     *
      * {@inheritdoc}
      */
     public function getIssues(array $parameters = [], $page = 1, $perPage = 30)
     {
-        // FIXME is not respecting the pagination
-
         $fetchedIssues = $pager->fetchAll(
             $this->issueClient->api('issue'),
             'all',
