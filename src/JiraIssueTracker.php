@@ -120,9 +120,9 @@ class JiraIssueTracker implements IssueTracker
     {
         $issue = $this->issueClient->create(
             array_merge($options, ['title' => $subject, 'body' => $body])
-        );
+        )->json();
 
-        return $issue['number'];
+        return $issue['id'];
     }
 
     /**
@@ -133,7 +133,7 @@ class JiraIssueTracker implements IssueTracker
         return $this->adaptIssueStructure(
             $this->issueClient->get(
                 $id
-            )
+            )->json()
         );
     }
 
@@ -142,7 +142,7 @@ class JiraIssueTracker implements IssueTracker
      */
     public function getIssueUrl($id)
     {
-        return sprintf('%s/%s/%s/issues/%d', $this->domain, $this->getUsername(), $this->getRepository(), $id);
+        return sprintf('%s/issue/%d', $this->url, $id);
     }
 
     /**
@@ -187,7 +187,8 @@ class JiraIssueTracker implements IssueTracker
      */
     public function closeIssue($id)
     {
-        $this->updateIssue($id, ['state' => 'closed']);
+        // @todo ask user how to change issue status
+        // $this->updateIssue($id, ['state' => 'closed']);
     }
 
     /**
@@ -249,5 +250,31 @@ class JiraIssueTracker implements IssueTracker
     public function getMilestones(array $parameters = [])
     {
         throw new \Exception('not sure how to implement');
+    }
+
+    /**
+     * Turns given structure into adapter issue structure
+     *
+     * @param  array $issue
+     *
+     * @return array
+     */
+    protected function adaptIssueStructure(array $issue)
+    {
+        return [
+            'url'          => $issue['self'],
+            'number'       => $issue['id'],
+            'state'        => isset($issue['status']) ? $issue['status']['name'] : null,
+            'title'        => $issue['summary'],
+            'body'         => $issue['description'],
+            'user'         => $issue['reporter']['name'],
+            'labels'       => $issue['labels'],
+            'assignee'     => $issue['assignee']['name'],
+            'milestone'    => $issue[''],
+            'created_at'   => $issue['created'],
+            'updated_at'   => $issue['updated'],
+            'closed_by'    => $issue['assignee']['name'],
+            'pull_request' => false,
+        ];
     }
 }
