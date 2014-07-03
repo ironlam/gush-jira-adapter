@@ -19,7 +19,7 @@ use Symfony\Component\Console\Helper\HelperSet;
  */
 class JiraFactory
 {
-    public static function createIssueTracker($adapterConfig, Config $config)
+    public static function createIssueTracker(array $adapterConfig, Config $config)
     {
         return new JiraIssueTracker($adapterConfig, $config);
     }
