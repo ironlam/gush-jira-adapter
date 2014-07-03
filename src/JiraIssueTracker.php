@@ -54,7 +54,7 @@ class JiraIssueTracker implements IssueTracker
     {
         $this->config = $config;
         $this->globalConfig = $globalConfig;
-        $this->issueClient = $this->buildJiraClient();
+        $this->buildJiraClient();
     }
 
     /**
@@ -65,17 +65,14 @@ class JiraIssueTracker implements IssueTracker
         return false !== stripos($remoteUrl, 'atlassian.com');
     }
 
-    /**
-     * @return IssueClient
-     */
-    protected function buildJiraClient()
+    private function buildJiraClient()
     {
         $this->url = rtrim($this->config['base_url'], '/');
         $this->domain = rtrim($this->config['repo_domain_url'], '/');
 
         $auth = $this->config['authentication'][IssueClient::AUTH_HTTP_PASSWORD];
 
-        return new IssueClient($this->url, $auth['username'], $auth['password']);
+        $this->issueClient = new IssueClient($this->url, $auth['username'], $auth['password']);
     }
 
     /**
