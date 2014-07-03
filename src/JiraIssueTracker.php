@@ -42,7 +42,7 @@ class JiraIssueTracker implements IssueTracker
     protected $config;
 
     /**
-     * @var \Gush\Config
+     * @var Config
      */
     protected $globalConfig;
 
