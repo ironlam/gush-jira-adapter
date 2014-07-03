@@ -12,7 +12,6 @@
 namespace Gush\Adapter;
 
 use Gush\Config;
-use Gush\Util\ArrayUtil;
 use JiraApi\Clients\IssueClient;
 use JiraApi\Clients\ProjectClient;
 
