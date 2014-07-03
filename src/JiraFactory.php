@@ -38,8 +38,8 @@ class JiraFactory
         return new DefaultConfigurator(
             $helperSet->get('question'),
             'Jira issue tracker',
-            'https://attlassian.net/',
-            'https://attlassian.net'
+            'https://atlassian.com/',
+            'https://atlassian.com'
         );
     }
 }
