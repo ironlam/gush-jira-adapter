@@ -198,7 +198,7 @@ class JiraIssueTracker implements IssueTracker
             ->json()
         ;
 
-        return array_map($this->adaptCommentStructure($comment), $comments['comments']);
+        return array_map([$this, 'adaptCommentStructure'], $comments['comments']);
     }
 
     /**
