@@ -38,8 +38,8 @@ class JiraEnterpriseFactory
         return new DefaultConfigurator(
             $helperSet->get('question'),
             'Jira Enterprise issue tracker',
-            'https://x.mydomain.com/api/v3/',
-            'https://x.mydomain.com'
+            'https://example.org/api/v3/',
+            'https://example.org'
         );
     }
 }

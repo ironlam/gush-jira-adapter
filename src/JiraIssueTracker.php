@@ -73,11 +73,9 @@ class JiraIssueTracker implements IssueTracker
         $this->url = rtrim($this->config['base_url'], '/');
         $this->domain = rtrim($this->config['repo_domain_url'], '/');
 
-        return new IssueClient(
-            $this->url,
-            $this->config['authentication'][IssueClient::AUTH_HTTP_PASSWORD]['username'],
-            $this->config['authentication'][IssueClient::AUTH_HTTP_PASSWORD]['password']
-        );
+        $auth = $this->config['authentication'][IssueClient::AUTH_HTTP_PASSWORD];
+
+        return new IssueClient($this->url, $auth['username'], $auth['password']);
     }
 
     /**
@@ -85,11 +83,9 @@ class JiraIssueTracker implements IssueTracker
      */
     public function authenticate()
     {
-        $projectClient = new ProjectClient(
-            $this->url,
-            $this->config['authentication'][IssueClient::AUTH_HTTP_PASSWORD]['username'],
-            $this->config['authentication'][IssueClient::AUTH_HTTP_PASSWORD]['password']
-        );
+        $auth = $this->config['authentication'][IssueClient::AUTH_HTTP_PASSWORD];
+
+        $projectClient = new ProjectClient($this->url, $auth['username'], $auth['password']);
 
         /** @var \GuzzleHttp\Message\Response $response */
         $response = $projectClient->getAll();
@@ -118,9 +114,12 @@ class JiraIssueTracker implements IssueTracker
      */
     public function openIssue($subject, $body, array $options = [])
     {
-        $issue = $this->issueClient->create(
-            array_merge($options, ['title' => $subject, 'body' => $body])
-        )->json();
+        $issue = $this->issueClient
+            ->create(
+                array_merge($options, ['title' => $subject, 'body' => $body])
+            )
+            ->json()
+        ;
 
         return $issue['id'];
     }
@@ -131,9 +130,7 @@ class JiraIssueTracker implements IssueTracker
     public function getIssue($id)
     {
         return $this->adaptIssueStructure(
-            $this->issueClient->get(
-                $id
-            )->json()
+            $this->issueClient->get($id)->json()
         );
     }
 
