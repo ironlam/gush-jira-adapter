@@ -37,6 +37,11 @@ class JiraIssueTracker implements IssueTracker
     protected $issueClient;
 
     /**
+     * @var IssueClient
+     */
+    protected $projectClient;
+
+    /**
      * @var array
      */
     protected $config;
@@ -73,6 +78,7 @@ class JiraIssueTracker implements IssueTracker
         $auth = $this->config['authentication'][IssueClient::AUTH_HTTP_PASSWORD];
 
         $this->issueClient = new IssueClient($this->url, $auth['username'], $auth['password']);
+        $this->projectClient = new ProjectClient($this->url, $auth['username'], $auth['password']);
     }
 
     /**
@@ -80,12 +86,8 @@ class JiraIssueTracker implements IssueTracker
      */
     public function authenticate()
     {
-        $auth = $this->config['authentication'][IssueClient::AUTH_HTTP_PASSWORD];
-
-        $projectClient = new ProjectClient($this->url, $auth['username'], $auth['password']);
-
         /** @var \GuzzleHttp\Message\Response $response */
-        $response = $projectClient->getAll();
+        $response = $this->projectClient->getAll();
 
         return 200 === $response->getStatusCode();
     }
@@ -139,23 +141,15 @@ class JiraIssueTracker implements IssueTracker
 
     /**
      * @todo FIXME is not respecting the pagination
+     * @todo implement getAllIssues method on client
      *
      * {@inheritdoc}
      */
     public function getIssues(array $parameters = [], $page = 1, $perPage = 30)
     {
-        $fetchedIssues = $pager->fetchAll(
-            $this->issueClient->api('issue'),
-            'all',
-            [
-                $this->getUsername(),
-                $this->getRepository(),
-                $parameters
-            ]
-        );
+        $fetchedIssues = $this->projectClient->getAllIssues($parameters);
 
         $issues = [];
-
         foreach ($fetchedIssues as $issue) {
             $issues[] = $this->adaptIssueStructure($issue);
         }
@@ -196,13 +190,7 @@ class JiraIssueTracker implements IssueTracker
      */
     public function getComments($id)
     {
-        $fetchedComments = $pager->fetchAll(
-            $this->issueClient->api('issue')->comments(),
-            'all',
-            [
-                $id,
-            ]
-        );
+        $fetchedComments = $this->issueClient->getComments($id);
 
         $comments = [];
 
