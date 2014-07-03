@@ -180,9 +180,12 @@ class JiraIssueTracker implements IssueTracker
      */
     public function createComment($id, $message)
     {
-        $comment = $this->issueClient->createComment($id, ['body' => $message]);
+        $comment = $this->issueClient
+            ->createComment($id, ['body' => $message])
+            ->json()
+        ;
 
-        return $comment['html_url'];
+        return $comment['self'];
     }
 
     /**
@@ -190,22 +193,12 @@ class JiraIssueTracker implements IssueTracker
      */
     public function getComments($id)
     {
-        $fetchedComments = $this->issueClient->getComments($id);
+        $comments = $this->issueClient
+            ->getComments($id)
+            ->json()
+        ;
 
-        $comments = [];
-
-        foreach ($fetchedComments as $comment) {
-            $comments[] = [
-                'id' => $comment['id'],
-                'url' => $comment['html_url'],
-                'body' => $comment['body'],
-                'user' => $comment['user']['login'],
-                'created_at' => !empty($comment['created_at']) ? new \DateTime($comment['created_at']) : null,
-                'updated_at' => !empty($comment['updated_at']) ? new \DateTime($comment['updated_at']) : null,
-            ];
-        }
-
-        return $comments;
+        return array_map($this->adaptCommentStructure($comment), $comments['comments']);
     }
 
     /**
@@ -213,10 +206,7 @@ class JiraIssueTracker implements IssueTracker
      */
     public function getLabels()
     {
-        return ArrayUtil::getValuesFromNestedArray(
-            $this->issueClient->all(),
-            'name'
-        );
+        throw new \Exception('This feature is not supported by the tracker');
     }
 
     /**
@@ -245,11 +235,30 @@ class JiraIssueTracker implements IssueTracker
             'user'         => $issue['reporter']['name'],
             'labels'       => $issue['labels'],
             'assignee'     => $issue['assignee']['name'],
-            'milestone'    => $issue[''],
-            'created_at'   => $issue['created'],
-            'updated_at'   => $issue['updated'],
+            'milestone'    => count($issue['versions']) > 0 ? $issue['versions'][0] : null,
+            'created_at'   => new \DateTime($issue['created']),
+            'updated_at'   => new \DateTime($issue['updated']),
             'closed_by'    => $issue['assignee']['name'],
             'pull_request' => false,
+        ];
+    }
+
+    /**
+     * Converts api comment to gush comment structure
+     *
+     * @param  array  $comment
+     *
+     * @return array
+     */
+    protected function adaptCommentStructure(array $comment)
+    {
+        return [
+            'id'         => $comment['id'],
+            'url'        => $comment['self'],
+            'body'       => $comment['body'],
+            'user'       => $comment['author']['name'],
+            'created_at' => new \DateTime($comment['created']),
+            'updated_at' => new \DateTime($comment['updated']),
         ];
     }
 }
