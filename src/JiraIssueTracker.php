@@ -186,10 +186,7 @@ class JiraIssueTracker implements IssueTracker
      */
     public function createComment($id, $message)
     {
-        $comment = $this->issueClient->createComment(
-            $id,
-            ['body' => $message]
-        );
+        $comment = $this->issueClient->createComment($id, ['body' => $message]);
 
         return $comment['html_url'];
     }
