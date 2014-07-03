@@ -176,10 +176,7 @@ class JiraIssueTracker implements IssueTracker
      */
     public function updateIssue($id, array $parameters)
     {
-        $this->issueClient->update(
-            $id,
-            $parameters
-        );
+        $this->issueClient->update($id, $parameters);
     }
 
     /**
