@@ -106,7 +106,7 @@ class JiraIssueTracker implements IssueTracker
      */
     public function getTokenGenerationUrl()
     {
-        throw new \Exception('not implemented');
+        throw new \Exception('This feature is not implemented for the Jira Adapter.');
     }
 
     /**
