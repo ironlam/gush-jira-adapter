@@ -22,6 +22,7 @@ class JiraEnterpriseFactory
     /**
      * @param array $adapterConfig
      * @param Config $config
+     *
      * @return JiraEnterpriseIssueTracker
      */
     public static function createIssueTracker(array $adapterConfig, Config $config)
@@ -31,6 +32,7 @@ class JiraEnterpriseFactory
 
     /**
      * @param HelperSet $helperSet
+     *
      * @return DefaultConfigurator
      */
     public static function createIssueTrackerConfigurator(HelperSet $helperSet)
@@ -38,7 +40,7 @@ class JiraEnterpriseFactory
         return new DefaultConfigurator(
             $helperSet->get('question'),
             'Jira Enterprise issue tracker',
-            'https://example.org/api/v3/',
+            'https://example.org/api',
             'https://example.org'
         );
     }

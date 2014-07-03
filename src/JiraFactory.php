@@ -22,6 +22,7 @@ class JiraFactory
     /**
      * @param array $adapterConfig
      * @param Config $config
+     *
      * @return JiraIssueTracker
      */
     public static function createIssueTracker(array $adapterConfig, Config $config)
@@ -31,6 +32,7 @@ class JiraFactory
 
     /**
      * @param HelperSet $helperSet
+     *
      * @return DefaultConfigurator
      */
     public static function createIssueTrackerConfigurator(HelperSet $helperSet)

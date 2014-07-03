@@ -112,9 +112,7 @@ class JiraIssueTracker implements IssueTracker
     public function openIssue($subject, $body, array $options = [])
     {
         $issue = $this->issueClient
-            ->create(
-                array_merge($options, ['title' => $subject, 'body' => $body])
-            )
+            ->create(array_merge($options, ['title' => $subject, 'body' => $body]))
             ->json()
         ;
 
