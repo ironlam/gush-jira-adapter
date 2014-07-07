@@ -14,6 +14,7 @@ namespace Gush\Adapter;
 use Gush\Config;
 use JiraApi\Clients\IssueClient;
 use JiraApi\Clients\ProjectClient;
+use JiraApi\Search\SearchBuilder;
 
 /**
  * @author Luis Cordova <cordoval@gmail.com>
@@ -139,14 +140,69 @@ class JiraIssueTracker implements IssueTracker
     }
 
     /**
-     * @todo FIXME is not respecting the pagination
      * @todo implement getAllIssues method on client
      *
      * {@inheritdoc}
      */
     public function getIssues(array $parameters = [], $page = 1, $perPage = 30)
     {
-        $fetchedIssues = $this->projectClient->getAllIssues($parameters);
+        $jql = [];
+        foreach ($parameters as $key => $value) {
+            switch ($key) {
+                case 'number':
+                    $jql[] = sprintf('id=%s', $value);
+                    break;
+                case 'state':
+                    $jql[] = sprintf('status=%s', $value);
+                    break;
+                case 'title':
+                    $jql[] = sprintf('summary~%s', $value);
+                    break;
+                case 'body':
+                    $jql[] = sprintf('description~%s', $value);
+                    break;
+                case 'user':
+                    $jql[] = sprintf('reporter=%s', $value);
+                    break;
+                case 'labels':
+                    $jql[] = sprintf('labels in (%s)', implode(',', $value));
+                    break;
+                case 'closed_by':
+                case 'assignee':
+                    $jql[] = sprintf('assignee=%s', $value);
+                    break;
+                case 'milestone':
+                    $jql[] = sprintf('versions in (%s)', $value);
+                    break;
+                case 'created_at':
+                    $nextDay = clone $value;
+                    $nextDay->modify('+1 day');
+                    $jql[] = sprintf(
+                        'created>=%s and created<=%s',
+                        $value->format('Y-m-d'),
+                        $nextDay->format('Y-m-d')
+                    );
+                    break;
+                case 'updated_at':
+                    $nextDay = clone $value;
+                    $nextDay->modify('+1 day');
+                    $jql[] = sprintf(
+                        'updated>=%s and updated<=%s',
+                        $value->format('Y-m-d'),
+                        $nextDay->format('Y-m-d')
+                    );
+                    break;
+            }
+        }
+
+        $searchBuilder = new SearchBuilder();
+        $searchBuilder
+            ->setJql(implode(' and ', $jql))
+            ->setLimit($perPage)
+            ->setPage($page)
+        ;
+
+        $fetchedIssues = $this->issueClient->search($searchBuilder);
 
         $issues = [];
         foreach ($fetchedIssues as $issue) {
