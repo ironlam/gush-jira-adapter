@@ -19,7 +19,7 @@ use JiraApi\Search\SearchBuilder;
 /**
  * @author Luis Cordova <cordoval@gmail.com>
  */
-class JiraIssueTracker implements IssueTracker
+class JiraIssueTracker extends BaseIssueTracker
 {
     /**
      * @var string|null
