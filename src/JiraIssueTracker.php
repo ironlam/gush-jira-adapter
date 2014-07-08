@@ -89,7 +89,7 @@ class JiraIssueTracker implements IssueTracker
         /** @var \GuzzleHttp\Message\Response $response */
         $response = $this->projectClient->getAll();
 
-        return 200 === $response->getStatusCode();
+        return '200' === $response->getStatusCode();
     }
 
     /**
