@@ -148,6 +148,9 @@ class JiraIssueTracker extends BaseIssueTracker
     {
         $jql = [];
         foreach ($parameters as $key => $value) {
+            if (!$value) {
+                continue;
+            }
             switch ($key) {
                 case 'number':
                     $jql[] = sprintf('id=%s', $value);
@@ -202,7 +205,7 @@ class JiraIssueTracker extends BaseIssueTracker
             ->setPage($page)
         ;
 
-        $fetchedIssues = $this->issueClient->search($searchBuilder);
+        $fetchedIssues = $this->issueClient->search($searchBuilder)->json()['issues'];
 
         $issues = [];
         foreach ($fetchedIssues as $issue) {
@@ -281,19 +284,21 @@ class JiraIssueTracker extends BaseIssueTracker
      */
     protected function adaptIssueStructure(array $issue)
     {
+        $fields = $issue['fields'];
+
         return [
             'url' => $issue['self'],
             'number' => $issue['id'],
-            'state' => isset($issue['status']) ? $issue['status']['name'] : null,
-            'title' => $issue['summary'],
-            'body' => $issue['description'],
-            'user' => $issue['reporter']['name'],
-            'labels' => $issue['labels'],
-            'assignee' => $issue['assignee']['name'],
-            'milestone' => count($issue['versions']) > 0 ? $issue['versions'][0] : null,
-            'created_at' => new \DateTime($issue['created']),
-            'updated_at' => new \DateTime($issue['updated']),
-            'closed_by' => $issue['assignee']['name'],
+            'state' => isset($fields['status']) ? $fields['status']['name'] : null,
+            'title' => $fields['summary'],
+            'body' => $fields['description'],
+            'user' => $fields['reporter']['name'],
+            'labels' => $fields['labels'],
+            'assignee' => $fields['assignee']['name'],
+            'milestone' => count($fields['versions']) > 0 ? $fields['versions'][0] : null,
+            'created_at' => new \DateTime($fields['created']),
+            'updated_at' => new \DateTime($fields['updated']),
+            'closed_by' => $fields['assignee']['name'],
             'pull_request' => false,
         ];
     }
