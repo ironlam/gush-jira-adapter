@@ -220,7 +220,27 @@ class JiraIssueTracker extends BaseIssueTracker
      */
     public function updateIssue($id, array $parameters)
     {
-        $this->issueClient->update($id, $parameters);
+        foreach ($parameters as $key => $value) {
+            switch($key) {
+                case 'assignee':
+                    $data = [
+                        'fields' => [
+                            'assignee' => [
+                                'name' => $value
+                            ]
+                        ]
+                    ];
+                    break;
+                case 'labels':
+                    $data = [
+                        'update' => [
+                            'labels' => ['set' => $value]
+                        ]
+                    ];
+                    break;
+            }
+        }
+        $this->issueClient->update($id, $data);
     }
 
     /**
