@@ -308,7 +308,7 @@ class JiraIssueTracker extends BaseIssueTracker
 
         return [
             'url' => $this->getIssueUrl($issue['key']),
-            'number' => $issue['id'],
+            'number' => sprintf('%s (%s)', $issue['key'], $issue['id']),
             'state' => isset($fields['status']) ? $fields['status']['name'] : null,
             'title' => $fields['summary'],
             'body' => $fields['description'],
