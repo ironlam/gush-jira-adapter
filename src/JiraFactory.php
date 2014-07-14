@@ -40,8 +40,8 @@ class JiraFactory
         return new DefaultConfigurator(
             $helperSet->get('question'),
             'Jira issue tracker',
-            'https://jira.atlassian.com',
-            'https://jira.atlassian.com',
+            'http://jira.atlassian.com/rest/api/2/',
+            'http://jira.atlassian.com/'
             [['Password', DefaultConfigurator::AUTH_HTTP_PASSWORD]]
         );
     }
