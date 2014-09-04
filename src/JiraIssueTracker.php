@@ -315,7 +315,7 @@ class JiraIssueTracker extends BaseIssueTracker
             'user' => $fields['reporter']['name'],
             'labels' => isset($fields['labels']) ? $fields['labels'] : [],
             'assignee' => $fields['assignee']['name'],
-            'milestone' => isset($fields['versions']) && count($fields['versions']) > 0 ? $fields['versions'][0] : null,
+            'milestone' => isset($fields['versions']) && count($fields['versions']) > 0 ? $fields['versions'][0]['name'] : null,
             'created_at' => new \DateTime($fields['created']),
             'updated_at' => new \DateTime($fields['updated']),
             'closed_by' => $fields['assignee']['name'],
