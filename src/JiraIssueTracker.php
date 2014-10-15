@@ -312,13 +312,13 @@ class JiraIssueTracker extends BaseIssueTracker
             'state' => isset($fields['status']) ? $fields['status']['name'] : null,
             'title' => $fields['summary'],
             'body' => $fields['description'],
-            'user' => $fields['reporter']['name'],
+            'user' => $fields['reporter']['displayName'],
             'labels' => isset($fields['labels']) ? $fields['labels'] : [],
-            'assignee' => $fields['assignee']['name'],
+            'assignee' => $fields['assignee']['displayName'],
             'milestone' => isset($fields['versions']) && count($fields['versions']) > 0 ? $fields['versions'][0]['name'] : null,
             'created_at' => new \DateTime($fields['created']),
             'updated_at' => new \DateTime($fields['updated']),
-            'closed_by' => $fields['assignee']['name'],
+            'closed_by' => $fields['assignee']['displayName'],
             'pull_request' => false,
         ];
     }
